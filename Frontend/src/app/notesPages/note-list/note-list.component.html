@@ -1,0 +1,81 @@
+<app-navbar></app-navbar>
+<div class="tools">
+  <h3>Notes</h3>
+  <select (change)="onFilterChange(+$event.target.value)">
+    <option *ngFor="let option of filterTypes" [value]="option.value">
+      {{ option.view }}
+    </option>
+  </select>
+  <a class="btn btn-primary btn-sm" href="/notes/create"> Create New + </a>
+</div>
+<div class="note-list">
+  <div class="card mb-1 note" *ngFor="let note of filteredNotes; index as i">
+    <div class="card-body">
+      <p class="card-text">{{ note.noteMessage }}</p>
+      <span class="badge bg-secondary mb-1">{{
+        noteTypeEnum[note.noteType]
+      }}</span>
+      <div *ngIf="note.noteType === 2" class="ms-1">
+        <input
+          type="checkbox"
+          [checked]="note.isComplete"
+          [id]="'check_' + i"
+          (change)="onCompleteChange(note.id)"
+        />
+        <label [for]="'check_' + i">Completed</label>
+      </div>
+      <div class="mb-1">{{ note.noteDate | date: "medium" }}</div>
+      <a [href]="'/notes/edit/' + note.id" class="btn btn-primary btn-sm me-2"
+        >Edit</a
+      >
+      <button class="btn btn-danger btn-sm" (click)="deleteId = note.id">
+        Delete
+      </button>
+    </div>
+  </div>
+  <div class="card text-center" *ngIf="filteredNotes.length === 0">
+    <div class="card-body">
+      <p class="card-test">No notes to show</p>
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="deleteId !== null"
+  class="modal show d-block"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete?</h5>
+        <button
+          type="button"
+          class="close btn btn-secondary"
+          (click)="deleteId = null"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are you sure to delete this note?</div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          (click)="deleteId = null"
+          class="btn btn-secondary"
+          data-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="delete(deleteId)"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

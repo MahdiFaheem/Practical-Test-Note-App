@@ -1,0 +1,17 @@
+form {
+  width: 80vw;
+  input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+  }
+}
+.form-group {
+  padding: 7px 3px;
+}
+.custom-control {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-left: 5px;
+}

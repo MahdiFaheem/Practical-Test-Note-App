@@ -1,0 +1,101 @@
+<app-navbar></app-navbar>
+<form [formGroup]="form" (ngSubmit)="onSave()">
+  <h3>{{ !!id ? "Edit Note" : "Create a Note" }}</h3>
+  <div class="form-group">
+    <label for="noteType">Note Type</label>
+    <select
+      class="form-control"
+      formControlName="noteType"
+      (change)="onNoteTypeChange(+$event.target.value)"
+    >
+      <option *ngFor="let noteType of noteTypes" [value]="noteType.value">
+        {{ noteType.view }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group" *ngIf="selectedNoteType !== 3">
+    <label for="Note">Note</label>
+    <textarea
+      class="form-control"
+      formControlName="noteMessage"
+      maxlength="100"
+      rows="3"
+      [ngClass]="{
+        'is-invalid':
+          ((f.noteMessage.touched || submitted) && f.noteMessage.errors) ||
+          f.noteMessage.errors?.pattern
+      }"
+    ></textarea>
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        (f.noteMessage.touched || submitted) &&
+        f.noteMessage.errors &&
+        f.noteMessage.errors.required
+      "
+    >
+      Message is required.
+    </div>
+  </div>
+  <div class="form-group" *ngIf="selectedNoteType === 3">
+    <label for="URL">URL</label>
+    <input
+      type="url"
+      class="form-control"
+      formControlName="noteMessage"
+      placeholder="https://"
+      [ngClass]="{
+        'is-invalid':
+          ((f.noteMessage.touched || submitted) && f.noteMessage.errors) ||
+          f.noteMessage.errors?.pattern
+      }"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        (f.noteMessage.touched || submitted) &&
+        f.noteMessage.errors &&
+        f.noteMessage.errors.required
+      "
+    >
+      URL is required.
+    </div>
+  </div>
+  <div
+    class="form-group"
+    *ngIf="selectedNoteType === 2 || selectedNoteType === 1"
+  >
+    <label for="date">Date & Time</label>
+    <input
+      type="datetime-local"
+      class="form-control"
+      formControlName="noteDate"
+      (click)="f.noteDate.touched = true"
+      [ngClass]="{
+        'is-invalid':
+          ((f.noteDate.touched || submitted) && f.noteDate.errors) ||
+          f.noteDate.errors?.pattern
+      }"
+    />
+    <div
+      class="invalid-feedback"
+      *ngIf="
+        ((f.noteDate.touched || submitted) && f.noteDate.errors) ||
+        f.noteDate.errors?.pattern
+      "
+    >
+      Date is required.
+    </div>
+  </div>
+  <div class="form-group" *ngIf="selectedNoteType === 2" class="custom-control">
+    <input
+      type="checkbox"
+      class="custom-control-input"
+      formControlName="isComplete"
+    />
+    <label for="isComplete">Is Completed</label>
+  </div>
+  <div class="float-end mt-3">
+    <button type="submit" class="btn btn-primary">Save</button>
+  </div>
+</form>
